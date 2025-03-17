@@ -106,7 +106,15 @@ if st.button("Submit") and query_text:
         st.write("📜 Retrieving policy details...")
         st.write("You entered:", query_text)
         result = retrieve_policy(str(query_text))
+        try:
+            vector_store = FAISS.load_local(VECTOR_DB_PATH, embedding, allow_dangerous_deserialization=True)
+            print("✅ FAISS loaded successfully!")
+        except Exception as e:
+            print("⚠️ Error loading FAISS:", e)
 
+            print(f"Vector store initialized? {vector_store is not None}")
+
+    
     else:
         result = "⚠️ I couldn't understand the query type."
 
