@@ -13,11 +13,14 @@ from typing import Literal, Optional
 openai.api_key = st.secrets["OPEN_AI_KEY"]
 
 # Load Vector Store (for SOP/Policies)
-VECTOR_DB_PATH = r"./sop_faiss_index/"
-if os.path.exists(VECTOR_DB_PATH):
-    vector_store = FAISS.load_local(VECTOR_DB_PATH, OpenAIEmbeddings(api_key= st.secrets["OPEN_AI_KEY"]))
-else:
-    vector_store = None  # Ensure error handling if DB is not ready
+VECTOR_DB_PATH = "./sop_faiss_index/"
+embedding = OpenAIEmbeddings(api_key=st.secrets["OPEN_AI_KEY"])
+
+try:
+    vector_store = FAISS.load_local(VECTOR_DB_PATH, embedding)
+    print("FAISS loaded successfully!")
+except Exception as e:
+    print("Error loading FAISS:", e)
 
 # Define CSV Inventory Data Directory
 CSV_DIR = "inventory_data"
