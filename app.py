@@ -105,7 +105,7 @@ if st.button("Submit") and query_text:
     elif "policy" in query_type:
         st.write("📜 Retrieving policy details...")
         st.write("You entered:", query_text)
-        result = retrieve_policy(query_text)
+        result = retrieve_policy(str(query_text))
 
     else:
         result = "⚠️ I couldn't understand the query type."
