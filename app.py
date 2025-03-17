@@ -10,7 +10,7 @@ from pydantic import BaseModel
 from typing import Literal, Optional
 
 # Set OpenAI API Key (Replace with your key)
-openai.api_key = st.secrets("OPEN_AI_KEY")
+openai.api_key = st.secrets["OPEN_AI_KEY"]
 
 # Load Vector Store (for SOP/Policies)
 VECTOR_DB_PATH = "sop_faiss_index"
