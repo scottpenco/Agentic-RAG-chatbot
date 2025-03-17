@@ -73,7 +73,7 @@ query_text = st.text_input("Ask me about inventory shipments or policies:")
 if st.button("Submit") and query_text:
     
     # Determine if query is for inventory or policy
-    response = openai.client.chat.completions.create(
+    response = client.chat.completions.create(
         model="gpt-4",
         messages=[{"role": "system", "content": "Classify the query as either 'inventory' or 'policy'."},
                   {"role": "user", "content": query_text}],
