@@ -10,7 +10,7 @@ from pydantic import BaseModel
 from typing import Literal, Optional
 from openai import OpenAI
 
-client = OpenAI(api_key= st.secrets("OPEN_AI_KEY"))
+client = OpenAI(api_key= st.secrets["OPEN_AI_KEY"])
 
 # Set OpenAI API Key (Replace with your key)
 openai.api_key = st.secrets["OPEN_AI_KEY"]
