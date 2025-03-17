@@ -25,6 +25,8 @@ try:
 except Exception as e:
     print("Error loading FAISS:", e)
 
+print(f"Vector store initialized? {vector_store is not None}")
+
 # Define CSV Inventory Data Directory
 CSV_DIR = "inventory_data"
 
