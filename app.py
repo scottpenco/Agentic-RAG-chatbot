@@ -8,6 +8,9 @@ from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.vectorstores import FAISS
 from pydantic import BaseModel
 from typing import Literal, Optional
+from openai import OpenAI
+
+client = OpenAI()
 
 # Set OpenAI API Key (Replace with your key)
 openai.api_key = st.secrets["OPEN_AI_KEY"]
