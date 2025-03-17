@@ -23,7 +23,7 @@ embedding = OpenAIEmbeddings(api_key=st.secrets["OPEN_AI_KEY"])
 vector_store = None  # Ensure it's always defined
 
 try:
-    vector_store = FAISS.load_local(VECTOR_DB_PATH, embedding)
+    vector_store = FAISS.load_local(VECTOR_DB_PATH, embedding, allow_dangerous_deserialization=True)
     print("✅ FAISS loaded successfully!")
 except Exception as e:
     print("⚠️ Error loading FAISS:", e)
