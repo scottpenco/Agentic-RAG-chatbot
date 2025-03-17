@@ -1,0 +1,8 @@
+Standard Operating Procedure: Inventory Management
+
+Policy: Store inventory must be maintained accurately and updated regularly.
+Procedure:
+1. Conduct weekly stock counts and update the system.
+2. Receive shipments and verify packing slips.
+3. Stock shelves according to product categories.
+4. Report inventory discrepancies to management.

@@ -1,0 +1,14 @@
+Standard Operating Procedure: Returns & Refunds Policy
+
+Policy: Customers may return unused items within 30 days of purchase with a valid receipt.
+Conditions:
+- The item must be in its original packaging.
+- Refunds will be issued to the original payment method.
+- Clearance and final sale items are not eligible for returns.
+- Returns without a receipt will be issued store credit.
+
+Procedure:
+1. Verify the item condition and receipt.
+2. Process the return through the POS system.
+3. If eligible, refund the amount or issue store credit.
+4. Update inventory records.

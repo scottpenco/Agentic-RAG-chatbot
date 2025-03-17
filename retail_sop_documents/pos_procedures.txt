@@ -1,0 +1,8 @@
+Standard Operating Procedure: POS (Point of Sale) Transactions
+
+Policy: All transactions must be recorded in the POS system.
+Procedure:
+1. Scan items and verify prices.
+2. Process payment and print a receipt.
+3. Ask customers if they need a bag.
+4. Thank the customer and invite them back.

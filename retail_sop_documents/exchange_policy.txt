@@ -1,0 +1,13 @@
+Standard Operating Procedure: Exchange Policy
+
+Policy: Customers may exchange items within 30 days of purchase.
+Conditions:
+- Items must be in resellable condition with tags attached.
+- Even exchanges are processed without additional fees.
+- Exchanges for a higher-priced item require the customer to pay the difference.
+
+Procedure:
+1. Inspect the item and verify eligibility.
+2. Locate the new item for exchange.
+3. Process the exchange in the POS system.
+4. Provide a new receipt to the customer.

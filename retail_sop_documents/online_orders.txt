@@ -1,0 +1,8 @@
+Standard Operating Procedure: Online Order Fulfillment & In-Store Pickup
+
+Policy: Orders must be fulfilled within 24 hours of placement.
+Procedure:
+1. Locate the order in the system.
+2. Pick and pack the items securely.
+3. Notify the customer via email or SMS.
+4. Verify customer ID upon pickup.
