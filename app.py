@@ -79,7 +79,7 @@ if st.button("Submit") and query_text:
                   {"role": "user", "content": query_text}],
     )
     
-    query_type = response["choices"][0]["message"]["content"].strip().lower()
+    query_type = response.choices[0].message.content.strip().lower()
     
     # Process inventory queries
     if "inventory" in query_type:
