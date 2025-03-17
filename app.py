@@ -23,11 +23,11 @@ embedding = OpenAIEmbeddings(api_key=st.secrets["OPEN_AI_KEY"])
 
 try:
     vector_store = FAISS.load_local(VECTOR_DB_PATH, embedding, allow_dangerous_deserialization=True)
-    print("✅ FAISS loaded successfully!")
+    st.write("✅ FAISS loaded successfully!")
 except Exception as e:
-    print("⚠️ Error loading FAISS:", e)
+    st.write("⚠️ Error loading FAISS:", e)
 
-print(f"Vector store initialized? {vector_store is not None}")
+st.write("Vector store initialized?  is not None")
 
 # Define CSV Inventory Data Directory
 CSV_DIR = "inventory_data"
