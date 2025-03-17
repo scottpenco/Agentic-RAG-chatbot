@@ -18,12 +18,13 @@ openai.api_key = st.secrets["OPEN_AI_KEY"]
 # Load Vector Store (for SOP/Policies)
 VECTOR_DB_PATH = "./sop_faiss_index/"
 embedding = OpenAIEmbeddings(api_key=st.secrets["OPEN_AI_KEY"])
+vector_store = None  # Ensure it's always defined
 
 try:
     vector_store = FAISS.load_local(VECTOR_DB_PATH, embedding)
-    print("FAISS loaded successfully!")
+    print("✅ FAISS loaded successfully!")
 except Exception as e:
-    print("Error loading FAISS:", e)
+    print("⚠️ Error loading FAISS:", e)
 
 print(f"Vector store initialized? {vector_store is not None}")
 
