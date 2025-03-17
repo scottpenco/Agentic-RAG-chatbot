@@ -15,7 +15,7 @@ openai.api_key = st.secrets["OPEN_AI_KEY"]
 # Load Vector Store (for SOP/Policies)
 VECTOR_DB_PATH = "sop_faiss_index"
 if os.path.exists(VECTOR_DB_PATH):
-    vector_store = FAISS.load_local(VECTOR_DB_PATH, OpenAIEmbeddings(api_key= st.secrets("OPEN_AI_KEY"))
+    vector_store = FAISS.load_local(VECTOR_DB_PATH, OpenAIEmbeddings(api_key= st.secrets("OPEN_AI_KEY")))
 else:
     vector_store = None  # Ensure error handling if DB is not ready
 
