@@ -5,7 +5,7 @@ import faiss
 import duckdb
 import os
 from langchain.embeddings.openai import OpenAIEmbeddings
-from langchain.vectorstores import FAISS
+from langchain_community.vectorstores import FAISS
 from pydantic import BaseModel
 from typing import Literal, Optional
 from openai import OpenAI
