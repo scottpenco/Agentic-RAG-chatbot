@@ -15,6 +15,8 @@ api_key= st.secrets["OPEN_AI_KEY"]
 # Initialize OpenAI Client
 client = OpenAI(api_key= api_key)
 
+print("✅ FAISS loaded successfully!")
+
 # Load Vector Store (for SOP/Policies)
 VECTOR_DB_PATH = "./sop_faiss_index/"
 embedding = OpenAIEmbeddings(api_key=api_key)
