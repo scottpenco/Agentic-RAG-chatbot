@@ -7,7 +7,7 @@ import streamlit as st
 
 
 # Load Policy/SOP Documents
-DATA_PATH = "/Users/Scott/Library/Mobile Documents/com~apple~CloudDocs/CVs and LOMs/Portfolio/DS 2024/Chatbot RAG and Agentic RAG/retail_sop_documents"
+DATA_PATH = "./retail_sop_documents"
 VECTOR_DB_PATH = "sop_faiss_index"
 
 # Load and split documents
