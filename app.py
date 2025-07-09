@@ -31,7 +31,7 @@ print(f"Vector store initialized? {vector_store is not None}")
 # Define CSV Inventory Data Directory
 CSV_DIR = "inventory_data"
 
-#List of CSV files
+# List of CSV files
 csv_files = [f for f in os.listdir(CSV_DIR) if f.endswith(".csv")]
 
 # Function to retrieve policy documents
@@ -118,6 +118,7 @@ def process_inventory_query(query: str):
         return "❌ No matching inventory records found."
 
     return result
+
 # Streamlit UI
 st.title("📦 Inventory & Policy RAG Chatbot")
 
@@ -133,6 +134,7 @@ if st.button("Submit") and query_text:
             {"role": "user", "content": query_text},
         ],
     )
+    print('button pressed 🙂')
 
     query_type = response.choices[0].message.content.strip().lower()
 
