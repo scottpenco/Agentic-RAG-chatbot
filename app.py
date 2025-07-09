@@ -36,6 +36,14 @@ csv_files = [f for f in os.listdir(CSV_DIR) if f.endswith(".csv")]
 
 # Function to retrieve policy documents
 def retrieve_policy(query: str):
+    vector_store = None  # Ensure it's always defined
+    try:
+        vector_store = FAISS.load_local(VECTOR_DB_PATH, embedding, allow_dangerous_deserialization=True)
+        print("✅ FAISS loaded successfully!")
+    except Exception as e:
+        print("⚠️ Error loading FAISS:", e)
+
+    print(f"Vector store initialized? {vector_store is not None}")
     if vector_store is None:
         return "⚠️ Policy retrieval system is currently unavailable. Please try again later."
 
