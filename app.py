@@ -16,7 +16,7 @@ api_key= st.secrets["OPEN_AI_KEY"]
 client = OpenAI(api_key= api_key)
 
 # Load Vector Store (for SOP/Policies)
-VECTOR_DB_PATH = "./sop_faiss_index/"
+VECTOR_DB_PATH = "../sop_faiss_index/"
 embedding = OpenAIEmbeddings(api_key=api_key)
 
 vector_store = None  # Ensure it's always defined
@@ -142,7 +142,6 @@ if st.button("Submit") and query_text:
             {"role": "user", "content": query_text},
         ],
     )
-    print('button pressed 🙂')
 
     query_type = response.choices[0].message.content.strip().lower()
 
