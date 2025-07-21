@@ -19,17 +19,13 @@ client = OpenAI(api_key= api_key)
 VECTOR_DB_PATH = "./sop_faiss_index"
 embedding = OpenAIEmbeddings(api_key=api_key)
 
-st.write("Vector DB Path:", VECTOR_DB_PATH)
-st.write("Files in vector path:", os.listdir(VECTOR_DB_PATH))
-
-
 vector_store = None  # Ensure it's always defined
 
 try:
     vector_store = FAISS.load_local(VECTOR_DB_PATH, embedding, allow_dangerous_deserialization=True)
     print("✅ FAISS loaded successfully!")
 except Exception as e:
-    print("⚠️ Error loading FAISS:", e)
+    st.write("⚠️ Error loading FAISS:", e)
 
 print(f"Vector store initialized? {vector_store is not None}")
 
