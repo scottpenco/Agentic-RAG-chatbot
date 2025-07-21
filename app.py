@@ -20,6 +20,7 @@ VECTOR_DB_PATH = "./sop_faiss_index/"
 embedding = OpenAIEmbeddings(api_key=api_key)
 
 vector_store = None  # Ensure it's always defined
+
 try:
     vector_store = FAISS.load_local(VECTOR_DB_PATH, embedding, allow_dangerous_deserialization=True)
     print("✅ FAISS loaded successfully!")
@@ -31,23 +32,15 @@ print(f"Vector store initialized? {vector_store is not None}")
 # Define CSV Inventory Data Directory
 CSV_DIR = "inventory_data"
 
-# List of CSV files
+#List of CSV files
 csv_files = [f for f in os.listdir(CSV_DIR) if f.endswith(".csv")]
 
 # Function to retrieve policy documents
 def retrieve_policy(query: str):
-    vector_store = None  # Ensure it's always defined
-    try:
-        vector_store = FAISS.load_local(VECTOR_DB_PATH, embedding, allow_dangerous_deserialization=True)
-        print("✅ FAISS loaded successfully!")
-    except Exception as e:
-        print("⚠️ Error loading FAISS:", e)
-
-    print(f"Vector store initialized? {vector_store is not None}")
     if vector_store is None:
         return "⚠️ Policy retrieval system is currently unavailable. Please try again later."
 
-    docs = vector_store.similarity_search(query, k=1)  # Retrieve top 3 relevant docs
+    docs = vector_store.similarity_search(query, k=1)  # Retrieve top 1 relevant docs
     if docs:
         return "\n\n".join([doc.page_content for doc in docs])
 
@@ -55,16 +48,20 @@ def retrieve_policy(query: str):
 
 def extract_date_llm(query: str) -> str:
     """Uses LLM to extract and format date in YYYYMM."""
-
     prompt = f"""
-    Extract and return only the date from the following query in YYYYMM format. 
-    If the date is relative (e.g., "last month"), convert it to absolute form based on today’s date.
+    You are an expert data assistant helping to match natural language queries to a set of monthly CSV data files.
 
+    Your task is to:
+    1. Extract a **single date** from the query.
+    2. If the date is relative (e.g., "last month", "this year"), convert it to **absolute YYYYMM** format.
+    3. Match this date to one of the available CSV file names: {csv_files}.
+    4. Return **only** the exact matching file name. No explanations, no extra text.
+
+    ## Input
     Query: "{query}"
-    
-    match the date to one of the csv file names {csv_files}
 
-    Only return the original file name nothing else. Just one word.
+    ## Output
+    One word only: the matching CSV filename (e.g., 'inventory_feburary_2024.csv') or nothing if no match.
     """
 
     response = client.chat.completions.create(model="gpt-4",
@@ -75,15 +72,48 @@ def extract_date_llm(query: str) -> str:
     
     return extracted_date
 
-def extract_category_from_query(query: str) -> Optional[str]:
-    """Extract category keyword from the query."""
-    category_keywords = ["electronics", "clothing", "furniture", "books", "toys"]  # Expand as needed
-    words = query.lower().split()
+def extract_sql_query(query: str) -> str:
+    """Uses LLM to extract or convert the user requests into a SQL query for an 'invetory' table"""
+    prompt = f"""
+    You are a AI assistant helping to match user requests into a SQL query for an 'invetory' table.
 
-    for word in words:
-        if word in category_keywords:
-            return word
-    return None
+    The 'inventory' table has the following columns:
+    - date (YYYY-MM-DD)
+    - category (TEXT) - e.g., 'Electronics', 'Apparel', 'Home Goods', 'Footwear'
+    - product (TEXT) -  e.g., 'Smartphones', 'Jackets', 'Rugs', 'Boots'
+    - quantity (INT)
+    - location (TEXT) - 'Warehouse A', 'Warehouse B', 'Warehouse C'
+
+    Only use fields from the table. Do not invent any columns. Use safe lowercase LIKE statements for text matching when needed.
+
+    Examples: 
+    User: "How many boots are available?"  
+    SQL: SELECT SUM(quantity) FROM inventory WHERE LOWER(product) LIKE '%boots%';
+
+    User: "What’s the stock level for rugs in Warehouse C?"  
+    SQL: SELECT SUM(quantity) FROM inventory WHERE LOWER(product) LIKE '%rugs%' AND LOWER(location) = 'warehouse c';
+
+    User: "Do you have any jackets in stock?"  
+    SQL: SELECT * FROM inventory WHERE LOWER(product) LIKE '%jackets%' AND quantity > 0;
+
+    User: "What products are available in Warehouse A?"  
+    SQL: SELECT DISTINCT product FROM inventory WHERE LOWER(location) = 'warehouse a' AND quantity > 0;
+
+    Don't create about the date, another agent takes care of this 
+
+    User: "Show inventory for February 2024"  
+    SQL: SELECT * FROM inventory;
+    Now write an SQL query for the following:
+
+    User: "{query}"
+
+    Only output the SQL query."""
+
+    response = client.chat.completions.create(model="gpt-4",
+    messages=[{"role": "system", "content": prompt}])
+    sql_query = response.choices[0].message.content
+
+    return sql_query
 
 def process_inventory_query(query: str):
     """Processes an inventory query using DuckDB and Pandas."""
@@ -92,7 +122,7 @@ def process_inventory_query(query: str):
 
     # Extract date and category from query
     date = extract_date_llm(query)
-    category = extract_category_from_query(query)
+
     #List of CSV files
     csv_files = [f for f in os.listdir(CSV_DIR) if f.endswith(".csv")]
     # Filter files by date if provided
@@ -111,24 +141,16 @@ def process_inventory_query(query: str):
     # Use DuckDB for efficient querying
     con = duckdb.connect(database=":memory:")
     con.execute(f"CREATE TABLE inventory AS SELECT * FROM read_csv_auto('{latest_csv}')")
-    
-    query_str = f"SELECT '{category.lower()}', SUM(quantity) AS total_quantity FROM inventory"
+    query_str = extract_sql_query(query)
     print(query_str)
-    if category:
-        query_str += f" WHERE LOWER(category) LIKE '%{category.lower()}%'"
-
-    query_str += "GROUP BY category ORDER BY total_quantity DESC"
-
-    # Run the query
     result = con.execute(query_str).fetchdf()
 
     if result.empty:
         return "❌ No matching inventory records found."
 
     return result
-
 # Streamlit UI
-st.title("📦 Inventory & Policy RAG Chatbot")
+st.title("🤖💬I'm a multi-agent chatbot designed to answer Inventory or Policy questions")
 
 # User Query Input
 query_text = st.text_input("Ask me about inventory shipments or policies:")
@@ -138,8 +160,23 @@ if st.button("Submit") and query_text:
     response = client.chat.completions.create(
         model="gpt-4",
         messages=[
-            {"role": "system", "content": "Classify the query as either 'inventory' or 'policy'."},
-            {"role": "user", "content": query_text},
+            {"role": "system", "content": "You are a helpful assistant that classifies user queries"},
+            {"role": "user", "content": f"""
+                You are a router agent in a multi-agent system. Your job is to classify user queries as either related to `inventory` or `policy`. 
+
+                Inventory queries are about product stock, availability, sizes, or restocks.  
+                Policy queries refer to company rules like returns, exchanges, pricing policies, or store hours.
+
+                Examples:
+                - "Do you have size 8 in stock?" → inventory  
+                - "What's your return window?" → policy  
+                - "Is the blue jacket available?" → inventory  
+                - "Do you price match other stores?" → policy  
+
+                Classify the following query with just one word: `inventory` or `policy`. Do not explain your reasoning.
+
+                Query: "{query_text}"
+        """},
         ],
     )
 
@@ -148,8 +185,6 @@ if st.button("Submit") and query_text:
     # Process inventory queries
     if "inventory" in query_type:
         st.write("🔍 Analyzing inventory query...")
-        extracted_date = extract_date_llm(query_text)
-        extracted_category = extract_category_from_query(query_text)
         result = process_inventory_query(query_text)
 
     # Process policy queries
