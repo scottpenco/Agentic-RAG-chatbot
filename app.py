@@ -25,7 +25,7 @@ try:
     vector_store = FAISS.load_local(VECTOR_DB_PATH, embedding, allow_dangerous_deserialization=True)
     print("✅ FAISS loaded successfully!")
 except Exception as e:
-    st.write("⚠️ Error loading FAISS:", e)
+    print("⚠️ Error loading FAISS:", e)
 
 print(f"Vector store initialized? {vector_store is not None}")
 
