@@ -23,3 +23,8 @@ This application is structured around a simple multi-agent setup, with each agen
 | 📄 **Policy Retrieval Agent** | **Unstructured Search** | Uses **FAISS vector search** and **OpenAI Embeddings** to find the most relevant company policy or SOP for a given query. |
 
 This modular approach allows for easy extension into a full multi-agent framework.
+
+![alt text]([https://ibb.co/5gZkNGzT](https://i.ibb.co/mVp0LbYJ/Multi-AIRAGPolicy.png))
+
+
+
