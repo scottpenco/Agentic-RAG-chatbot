@@ -7,7 +7,7 @@ import streamlit as st
 
 
 # Load Policy/SOP Documents
-DATA_PATH = "./retail_sop_documents"
+DATA_PATH = os.path.abspath("./retail_sop_documents")
 VECTOR_DB_PATH = "sop_faiss_index"
 
 # Load and split documents
