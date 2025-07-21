@@ -16,7 +16,7 @@ api_key= st.secrets["OPEN_AI_KEY"]
 client = OpenAI(api_key= api_key)
 
 # Load Vector Store (for SOP/Policies)
-VECTOR_DB_PATH = os.path.abspath("./sop_faiss_index/")
+VECTOR_DB_PATH = os.path.relpath("./sop_faiss_index/")
 embedding = OpenAIEmbeddings(api_key=api_key)
 
 vector_store = None  # Ensure it's always defined
