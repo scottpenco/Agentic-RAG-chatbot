@@ -24,7 +24,5 @@ This application is structured around a simple multi-agent setup, with each agen
 
 This modular approach allows for easy extension into a full multi-agent framework.
 
-![alt text](https://ibb.co/5gZkNGzT](https://i.ibb.co/mVp0LbYJ/Multi-AIRAGPolicy.png)
-
 
 
