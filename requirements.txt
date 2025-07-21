@@ -5,7 +5,7 @@ numpy==1.26.3
 faiss-cpu==1.7.4
 duckdb==0.9.2
 langchain==0.1.7
-pydantic==1.10.13
+pydantic==2.5.3
 tiktoken==0.5.2
 chromadb==0.4.21
 python-dotenv==1.0.0
